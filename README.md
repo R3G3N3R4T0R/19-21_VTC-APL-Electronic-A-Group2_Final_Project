@@ -21,6 +21,7 @@ Qt5
 ### ESP32 Mainboard
 [CH340 USB Driver](http://www.wch.cn/download/CH341SER_EXE.html)
 [Arduino ESP32 Board Definition](https://github.com/espressif/arduino-esp32)
+[ESP32 BLE library](https://github.com/nkolban/ESP32_BLE_Arduino)
 ### Development Environment
 [Vim](www.vim.org)
 [Arduino IDE](https://www.arduino.cc/en/Main/Software)
