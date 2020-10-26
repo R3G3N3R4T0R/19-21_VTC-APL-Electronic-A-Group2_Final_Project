@@ -8,21 +8,28 @@ To simplify and minimize the module, onboard control is not supported, remote mo
 
 ## Software Design
 The software part consist of the firmware for running the system and a library for the client software to control the system
-![Refer to connection-flowchart in repo]
+![Refer to connection-flowchart in repo](https://github.com/R3G3N3R4T0R/19-21_VTC-APL-Electronic-A-Group2_Final_Project/blob/main/connection-flowchart.png?raw=true)
+Flow of the firmware
+![Refer to devflow in repo](https://github.com/R3G3N3R4T0R/19-21_VTC-APL-Electronic-A-Group2_Final_Project/blob/main/devflow.png?raw=true)
+
+### Client Library
+The pwrmonclient library with QtBluetooth Component is designed to only establish connection to the device and process information sent or received. With changes to the firmware's representation of the information, only this library needs to be changed.
 
 ## Dependencies
 ### Common
 ### Device firmware
-Arduino Default Library
+- Arduino Core
+- Arduino Bluetooth (yet to be supported)
+#### ESP32
+- [Arduino ESP32 Board Definition](https://github.com/espressif/arduino-esp32)
+- [ESP32 BLE library](https://github.com/nkolban/ESP32_BLE_Arduino)
 ### Client Controller
-Qt5
+- Qt5
 
 ## Tools
 ### ESP32 Mainboard
-[CH340 USB Driver](http://www.wch.cn/download/CH341SER_EXE.html)
-[Arduino ESP32 Board Definition](https://github.com/espressif/arduino-esp32)
-[ESP32 BLE library](https://github.com/nkolban/ESP32_BLE_Arduino)
+- [CH340 USB Driver](http://www.wch.cn/download/CH341SER_EXE.html)
 ### Development Environment
-[Vim](www.vim.org)
-[Arduino IDE](https://www.arduino.cc/en/Main/Software)
-[Qt Creator](https://github.com/qt-creator/qt-creator)
+- [Vim](www.vim.org)
+- [Arduino IDE](https://www.arduino.cc/en/Main/Software)
+- [Qt Creator](https://github.com/qt-creator/qt-creator)

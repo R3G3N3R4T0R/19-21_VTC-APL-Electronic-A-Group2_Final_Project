@@ -12,7 +12,8 @@
 //#define PINS_IN2 {} //array of pins set to be inputs with adc2, comment out if not needed
 
   //Output DAC
-//#define PINS_OUT {} //array of pins set to be output, comment out if not needed
+#define PIN_RELAY 18
+#define PINS_OUT {18} //array of pins set to be output, comment out if not needed
 
 /*********
  * BOARD *
