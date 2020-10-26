@@ -8,8 +8,11 @@ To simplify and minimize the module, onboard control is not supported, remote mo
 
 ## Software Design
 The software part consist of the firmware for running the system and a library for the client software to control the system
+
 ![Refer to connection-flowchart in repo](https://github.com/R3G3N3R4T0R/19-21_VTC-APL-Electronic-A-Group2_Final_Project/blob/main/connection-flowchart.png?raw=true)
+
 Flow of the firmware
+
 ![Refer to devflow in repo](https://github.com/R3G3N3R4T0R/19-21_VTC-APL-Electronic-A-Group2_Final_Project/blob/main/devflow.png?raw=true)
 
 ### Client Library
