@@ -2,7 +2,6 @@
 #include <string.h>
 #include "Configuration.h"
 #include "EEPROM.h"
-#include "WiFi.h"
 #ifdef ESP32_DEV
 	#include "BLEDevice.h"
 	#include "BLEUtils.h"
