@@ -61,12 +61,12 @@ void setup()
 void loop()
 {	
 	//NETWORK IN
-	static char flags = 2; // flag position | reserve 0000 | sleep 0 | fetch 0 | relay state+flag 10
+	static unsigned char flags = 2; // flag position | reserve 0000 | sleep 0 | fetch 0 | relay state+flag 10
 	std::string data_rcv = ble_char_receiver->getValue(); //fetch value from BLE Client
-	char[1] data;
+	unsigned char[1] data;
 	strncpy(data, data_rcv.cstr(), sizeof(data)); //transfer to a c string
 
-	flags &= 0b11110010; //0ing data bits
+	flags &= ~(0b00001101); //0ing data bits
 	flags ^= (data[0] & 0b00001101); //Bits assigning and masking read only bits from data
 
 	//FETCH READINGS
@@ -89,7 +89,7 @@ void loop()
 	{
 #if defined ESP32_DEV
 		esp_deep_sleep_start();
-		flags &= 0b11110111; //flip down sleep flag if hardware woke up
+		flags &= ~(0b00001000); //flip down sleep flag if hardware woke up
 #endif
 	}
 
@@ -104,7 +104,7 @@ void loop()
 		sprintf(data_pkg, "%d_FETCH_BASE", systemp);
 		ble_char_thermals->setValue(data_pkg);
 		//Flip down fetch flag
-		flags &= 0b11111011;
+		flags &= ~(0b00000100);
 	}
 	delay(LOOP_DELAY_INTERVAL);
 }
