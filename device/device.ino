@@ -47,7 +47,7 @@ void setup()
 	  //Create Characteristics using UUID
 	BLECharacteristic *ble_char_electric = ble_srvc->createCharacteristic(CHAR1_UUID, BLECharacteristic::PROPERTY_READ); //Electrical State Monitoring
 	BLECharacteristic *ble_char_thermals = ble_srvc->createCharacteristic(CHAR2_UUID, BLECharacteristic::PROPERTY_READ); //Thermal Monitoring
-`	BLECharacteristic *ble_char_receiver = ble_srvc->createCharacteristic(CHAR3_UUID, BLECharacteristic::PROPERTY_WRITE | BLECharacteristic::PROPERTY_READ); //Signal Receiver
+	BLECharacteristic *ble_char_receiver = ble_srvc->createCharacteristic(CHAR3_UUID, BLECharacteristic::PROPERTY_WRITE | BLECharacteristic::PROPERTY_READ); //Signal Receiver
 	ble_char_receiver->setValue(0); //Receiver default value
 	  //Advertising Protocols
 	BLEAdvertising *ble_ad = BLEDevice::getAdvertising();
@@ -63,7 +63,7 @@ void loop()
 	//NETWORK IN
 	static unsigned char flags = 2; // flag position | reserve 0000 | sleep 0 | fetch 0 | relay state+flag 10
 	std::string data_rcv = ble_char_receiver->getValue(); //fetch value from BLE Client
-	unsigned char[1] data;
+	unsigned char data[1];
 	strncpy(data, data_rcv.cstr(), sizeof(data)); //transfer to a c string
 
 	flags &= ~(0b00001101); //0ing data bits
@@ -79,7 +79,7 @@ void loop()
 		systemp = analogRead(PIN_THERMISTOR1);
 	}
 	//OPERATIONS
-	if(!((flags & 0b00000011) ^ 0b00000011)) //relay state and flag mismatche
+	if(flags & 0b00000001) // relay flag true
 	{
 		digitalWrite(PIN_RELAY, !digitalRead(PIN_RELAY)); // Reverse current state
 		flags ^= 0b00000010; // Flip state
@@ -94,7 +94,7 @@ void loop()
 	}
 
 	//NETWORK OUT
-	static char[20] data_pkg; //cstring for packaging data
+	static char data_pkg[20]; //cstring for packaging data
 	if(flags & 0b00000100) //fetch flag true
 	{
 		//Electrical data
