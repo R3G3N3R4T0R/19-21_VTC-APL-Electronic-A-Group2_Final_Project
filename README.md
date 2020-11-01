@@ -21,13 +21,13 @@ The pwrmonclient library with QtBluetooth Component is designed to only establis
 ## Dependencies
 ### Common
 ### Device firmware
-- Arduino Core
+- [Arduino Core](https://github.com/arduino/Arduino)
 - Arduino Bluetooth (yet to be supported)
 #### ESP32
 - [Arduino ESP32 Board Definition](https://github.com/espressif/arduino-esp32)
-- [ESP32 BLE library](https://github.com/nkolban/ESP32_BLE_Arduino)
-### Client Controller
-- Qt5
+- [ESP32 BLE library](https://github.com/nkolban/ESP32_BLE_Arduino)[(Ardunino IDE)](https://www.arduino.cc/reference/en/libraries/esp32-ble-arduino)
+### Client Controller(Library)
+- [Qt Bluetooth](https://doc.qt.io/qt-5/qtbluetooth-index.html)
 
 ## Tools
 ### ESP32 Mainboard
