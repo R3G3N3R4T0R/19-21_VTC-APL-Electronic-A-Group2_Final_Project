@@ -66,8 +66,8 @@ void loop()
     unsigned char data[1];
     strncpy(data, data_rcv.cstr(), sizeof(data)); //transfer to a c string
 
-    flags &= ~(0b00001101); //0ing data bits
-    flags ^= (data[0] & 0b00001101); //Bits assigning and masking read only bits from data
+    flags &= ~(0b00001101); //0ing data bits, relay flag is left on its own
+    flags |= (data[0] & 0b00001101); //Bits assigning and masking read only bits from data
 
     //FETCH READINGS
     static int current, voltage, systemp = 0;
