@@ -19,7 +19,12 @@
  * BOARD *
  *********/
 #define LOOP_DELAY_INTERVAL 250 // loop delay in msec
-#define FETCH_BASE 1023 // The max value returned by the sensor, assuming min is 0
+
+    //Maximum Value, translate 1023 from the sensor to it actual representation
+#define V_MAX 15
+#define I_MAX 5
+#define T_MIN 0
+#define T_MAX 75
 
 /************
  * WIRELESS *

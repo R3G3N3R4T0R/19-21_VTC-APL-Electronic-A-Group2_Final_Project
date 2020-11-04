@@ -98,10 +98,10 @@ void loop()
     if(flags & 0b00000100) //fetch flag true
     {
         //Electrical data
-        sprintf(data_pkg, "%d-%d_FETCH_BASE", voltage, current,);
+        sprintf(data_pkg, "%d-%d_%d-%d", voltage, current, V_MAX, I_MAX);
         ble_char_electric->setValue(data_pkg);
         //Thermal data
-        sprintf(data_pkg, "%d_FETCH_BASE", systemp);
+        sprintf(data_pkg, "%d_%d-%d", systemp,, T_MIN, T_MAX);
         ble_char_thermals->setValue(data_pkg);
         //Flip down fetch flag
         flags &= ~(0b00000100);
