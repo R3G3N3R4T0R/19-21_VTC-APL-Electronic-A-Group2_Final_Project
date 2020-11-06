@@ -61,10 +61,10 @@ void setup()
 void loop()
 {   
     //NETWORK IN
-    static unsigned char flags = 2; // flag position | reserve 0000 | sleep 0 | fetch 0 | relay state+flag 10
+    static uint8_t flags = 2; // flag position | reserve 0000 | sleep 0 | fetch 0 | relay state+flag 10
     std::string data_rcv = ble_char_receiver->getValue(); //fetch value from BLE Client
-    unsigned char data[1];
-    strncpy(data, data_rcv.cstr(), sizeof(data)); //transfer to a c string
+    uint8_t data[1];
+    memcpy(data, data_rcv.c_str(), sizeof(data)); //transfer to a c string
 
     flags &= ~(0b00001101); //0ing data bits, relay flag is left on its own
     flags |= (data[0] & 0b00001101); //Bits assigning and masking read only bits from data
