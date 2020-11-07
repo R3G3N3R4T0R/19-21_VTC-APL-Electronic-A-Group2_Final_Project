@@ -6,7 +6,7 @@
   //Input ADC (32-39)
 #define PIN_POTENTIOMETER 34
 #define PIN_AMMETER 35
-#define PIN_THERMISTOR 39
+#define PIN_THERMISTOR1 39
 #define PINS_IN1 {34,35,39} //array of pins set to be inputs with adc1
     //Input ADC2 (0,2,3,12-15,25-27)
 //#define PINS_IN2 {} //array of pins set to be inputs with adc2, comment out if not needed

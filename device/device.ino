@@ -2,7 +2,7 @@
 #include <string.h>
 #include "Configuration.h"
 #include "EEPROM.h"
-#ifdef ESP32_DEV
+#ifndef __AVR__
     #include "BLEDevice.h"
     #include "BLEUtils.h"
     #include "BLEServer.h"
@@ -16,6 +16,7 @@
 
 void setup()
 {
+    if(1){ //Scope controller
     //PIN SETUP
     const int pins_in1[] = PINS_IN1;
     for(int pin = 0; pin < sizeof(pins_in1)/sizeof(pins_in1[0]); pin++)
@@ -36,6 +37,7 @@ void setup()
         pinMode(pins_out[pin],OUTPUT);
     }
     digitalWrite(PIN_RELAY, HIGH);
+    } // End of scope controller
 #endif
     //BOARD INIT
     //EEPROM FETCH
@@ -56,10 +58,10 @@ void setup()
     ble_ad->setMinPreferred(0x06);  // functions that help with iPhone connections issue
     ble_ad->setMinPreferred(0x12);
     BLEDevice::startAdvertising();
-}
 
-void loop()
-{   
+// void loop()
+    while(1){ // Initiate infinite loop
+
     //NETWORK IN
     static uint8_t flags = 2; // flag position | reserve 0000 | sleep 0 | fetch 0 | relay state+flag 10
     std::string data_rcv = ble_char_receiver->getValue(); //fetch value from BLE Client
@@ -87,7 +89,7 @@ void loop()
 
     if(flags & 0b00001000) // sleep flag true
     {
-#if defined ESP32_DEV
+#ifndef __AVR__
         esp_deep_sleep_start();
         flags &= ~(0b00001000); //flip down sleep flag if hardware woke up
 #endif
@@ -101,13 +103,17 @@ void loop()
         sprintf(data_pkg, "%d-%d_%d-%d", voltage, current, V_MAX, I_MAX);
         ble_char_electric->setValue(data_pkg);
         //Thermal data
-        sprintf(data_pkg, "%d_%d-%d", systemp,, T_MIN, T_MAX);
+        sprintf(data_pkg, "%d_%d-%d", systemp, T_MIN, T_MAX);
         ble_char_thermals->setValue(data_pkg);
         //Flip down fetch flag
         flags &= ~(0b00000100);
     }
     delay(LOOP_DELAY_INTERVAL);
+    
+    } // End of infinite loop
 }
+
+void loop(){} // dummy void loop
 
 /*
 //For makefile users
