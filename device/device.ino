@@ -14,6 +14,8 @@
  * PLEASE CHECK THE DOCUMENTATION FOR NECCESARY DEPENDENCIES
  ********************/
 
+void loop();
+
 void setup()
 {
     if(1){ //Scope controller
@@ -59,9 +61,12 @@ void setup()
     ble_ad->setMinPreferred(0x12);
     BLEDevice::startAdvertising();
 
-// void loop()
-    while(1){ // Initiate infinite loop
+    while(1)
+    loop();
+}
 
+void loop()
+{
     //NETWORK IN
     static uint8_t flags = 2; // flag position | reserve 0000 | sleep 0 | fetch 0 | relay state+flag 10
     std::string data_rcv = ble_char_receiver->getValue(); //fetch value from BLE Client
@@ -111,10 +116,8 @@ void setup()
     }
     delay(LOOP_DELAY_INTERVAL);
     
-    } // End of infinite loop
 }
 
-void loop(){} // dummy void loop
 
 /*
 //For makefile users
@@ -122,7 +125,5 @@ int main()
 {
     init();
     setup();
-    while(1)
-    loop();
 }
 */
