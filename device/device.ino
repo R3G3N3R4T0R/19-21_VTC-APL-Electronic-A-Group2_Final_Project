@@ -50,7 +50,7 @@ void setup()
     BLECharacteristic *ble_char_electric = ble_srvc->createCharacteristic(CHAR1_UUID, BLECharacteristic::PROPERTY_READ); //Electrical State Monitoring
     BLECharacteristic *ble_char_thermals = ble_srvc->createCharacteristic(CHAR2_UUID, BLECharacteristic::PROPERTY_READ); //Thermal Monitoring
     BLECharacteristic *ble_char_receiver = ble_srvc->createCharacteristic(CHAR3_UUID, BLECharacteristic::PROPERTY_WRITE | BLECharacteristic::PROPERTY_READ); //Signal Receiver
-    ble_char_receiver->setValue(0); //Receiver default value
+    ble_char_receiver->setValue("\0"); //Receiver default value
       //Advertising Protocols
     BLEAdvertising *ble_ad = BLEDevice::getAdvertising();
     ble_ad->addServiceUUID(SRVC_UUID);
@@ -65,6 +65,7 @@ void setup()
     //NETWORK IN
     static uint8_t flags = 2; // flag position | reserve 0000 | sleep 0 | fetch 0 | relay state+flag 10
     std::string data_rcv = ble_char_receiver->getValue(); //fetch value from BLE Client
+    ble_char_receiver->setValue("\0") //reset receiver characteristic once fetched
     uint8_t data;
     memcpy(&data, data_rcv.c_str(), sizeof(data)); //transfer to a c string
 
