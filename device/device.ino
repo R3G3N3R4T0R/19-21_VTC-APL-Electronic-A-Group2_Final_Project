@@ -14,10 +14,18 @@
  * PLEASE CHECK THE DOCUMENTATION FOR NECCESARY DEPENDENCIES
  ********************/
 
-void loop();
-
 void setup()
 {
+    //Enumeration
+    enum BitMask
+    {
+        BitMask_rflag = 0x01,
+        BitMask_rstat = 0x02,
+        BitMask_fetch = 0x04,
+        BitMask_sleep = 0x08,
+        BitMask_data  = 0x0D
+    };
+    
     if(1){ //Scope controller
     //PIN SETUP
     const int pins_in1[] = PINS_IN1;
@@ -52,7 +60,10 @@ void setup()
     BLECharacteristic *ble_char_electric = ble_srvc->createCharacteristic(CHAR1_UUID, BLECharacteristic::PROPERTY_READ); //Electrical State Monitoring
     BLECharacteristic *ble_char_thermals = ble_srvc->createCharacteristic(CHAR2_UUID, BLECharacteristic::PROPERTY_READ); //Thermal Monitoring
     BLECharacteristic *ble_char_receiver = ble_srvc->createCharacteristic(CHAR3_UUID, BLECharacteristic::PROPERTY_WRITE | BLECharacteristic::PROPERTY_READ); //Signal Receiver
-    ble_char_receiver->setValue("\0"); //Receiver default value
+    uint8_t rcv_def = BitMask_rstat;
+    ble_char_receiver->setValue(&rcv_def, 1);
+      //Start BLE Service
+    ble_srvc->start();
       //Advertising Protocols
     BLEAdvertising *ble_ad = BLEDevice::getAdvertising();
     ble_ad->addServiceUUID(SRVC_UUID);
@@ -61,49 +72,42 @@ void setup()
     ble_ad->setMinPreferred(0x12);
     BLEDevice::startAdvertising();
 
-    while(1)
-    loop();
-}
-
-void loop()
+//Start of Loop
+while(1)
 {
     //NETWORK IN
-    static uint8_t flags = 2; // flag position | reserve 0000 | sleep 0 | fetch 0 | relay state+flag 10
-    std::string data_rcv = ble_char_receiver->getValue(); //fetch value from BLE Client
-    ble_char_receiver->setValue("\0") //reset receiver characteristic once fetched
-    uint8_t data;
-    memcpy(&data, data_rcv.c_str(), sizeof(data)); //transfer to a c string
+    static uint8_t flags; // flag position | reserve 0000 | sleep 0 | fetch 0 | relay state+flag 10
 
-    flags &= ~(0b00001101); //0ing data bits, relay flag is left on its own
-    flags |= (data & 0b00001101); //Bits assigning and masking read only bits from data
+    flags |= (ble_char_receiver->getData()[0] & BitMask_data); //fetch only data bits from BLE Client
+    uint8_t flags_char = (flags & ~(BitMask_data)); //filter the state for the response
+    ble_char_receiver->setValue(&flags_char, 1); //respond receiver characteristic once fetched
 
     //FETCH READINGS
     static int current, voltage, systemp = 0;
 
-    if(flags & 0b00000100) // fetch flag true
+    if(flags & BitMask_fetch) // fetch flag true
     {
         current = analogRead(PIN_AMMETER);
         voltage = analogRead(PIN_POTENTIOMETER);
         systemp = analogRead(PIN_THERMISTOR1);
     }
     //OPERATIONS
-    if(flags & 0b00000001) // relay flag true
+    if(flags & BitMask_rflag) // relay flag true
     {
         digitalWrite(PIN_RELAY, !digitalRead(PIN_RELAY)); // Reverse current state
-        flags ^= 0b00000010; // Flip state
+        flags ^= BitMask_rstat; // Flip state
     }
 
-    if(flags & 0b00001000) // sleep flag true
+    if(flags & BitMask_sleep) // sleep flag true
     {
 #ifndef __AVR__
         esp_deep_sleep_start();
-        flags &= ~(0b00001000); //flip down sleep flag if hardware woke up
 #endif
     }
 
     //NETWORK OUT
     static char data_pkg[20]; //cstring for packaging data
-    if(flags & 0b00000100) //fetch flag true
+    if(flags & BitMask_fetch) //fetch flag true
     {
         //Electrical data
         sprintf(data_pkg, "%d-%d_%d-%d", voltage, current, V_MAX, I_MAX);
@@ -111,13 +115,14 @@ void loop()
         //Thermal data
         sprintf(data_pkg, "%d_%d-%d", systemp, T_MIN, T_MAX);
         ble_char_thermals->setValue(data_pkg);
-        //Flip down fetch flag
-        flags &= ~(0b00000100);
     }
-    delay(LOOP_DELAY_INTERVAL);
-    
-}
 
+    flags &= ~(BitMask_data); //0ing data bits, state flags are left on their own
+    delay(LOOP_DELAY_INTERVAL);
+} // while(1)   
+} // setup()
+
+void loop(){}//Dummy loop() for Arduino IDE
 
 /*
 //For makefile users
