@@ -60,8 +60,6 @@ void setup()
     BLECharacteristic *ble_char_electric = ble_srvc->createCharacteristic(CHAR1_UUID, BLECharacteristic::PROPERTY_READ); //Electrical State Monitoring
     BLECharacteristic *ble_char_thermals = ble_srvc->createCharacteristic(CHAR2_UUID, BLECharacteristic::PROPERTY_READ); //Thermal Monitoring
     BLECharacteristic *ble_char_receiver = ble_srvc->createCharacteristic(CHAR3_UUID, BLECharacteristic::PROPERTY_WRITE | BLECharacteristic::PROPERTY_READ); //Signal Receiver
-    uint8_t rcv_def = BitMask_rstat;
-    ble_char_receiver->setValue(&rcv_def, 1);
       //Start BLE Service
     ble_srvc->start();
       //Advertising Protocols
@@ -76,7 +74,7 @@ void setup()
 while(1)
 {
     //NETWORK IN
-    static uint8_t flags; // flag position | reserve 0000 | sleep 0 | fetch 0 | relay state+flag 10
+    static uint8_t flags = 2; // flag position | reserve 0000 | sleep 0 | fetch 0 | relay state+flag 10
 
     flags |= (ble_char_receiver->getData()[0] & BitMask_data); //fetch only data bits from BLE Client
     uint8_t flags_char = (flags & ~(BitMask_data)); //filter the state for the response
