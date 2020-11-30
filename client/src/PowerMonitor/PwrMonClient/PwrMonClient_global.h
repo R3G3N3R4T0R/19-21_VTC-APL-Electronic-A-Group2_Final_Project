@@ -1,0 +1,12 @@
+#ifndef PWRMONCLIENT_GLOBAL_H
+#define PWRMONCLIENT_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(PWRMONCLIENT_LIBRARY)
+#  define PWRMONCLIENT_EXPORT Q_DECL_EXPORT
+#else
+#  define PWRMONCLIENT_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // PWRMONCLIENT_GLOBAL_H
