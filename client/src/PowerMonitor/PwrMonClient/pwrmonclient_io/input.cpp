@@ -12,7 +12,7 @@ std::string PwrMonClient::UnpackData( std::string input, QBluetoothUuid uuid)
 
     if (uuid == QBluetoothUuid(QString("eb402e5a-51d6-4280-8b62-441f93fddd70")))
     { // For original Electrical Characteristic of the BLE server
-        const int ValueBase = 1023;
+        const int ValueBase = 4095;
         int voltage, current, max_v, max_i = 0;
 
         std::string values = input.substr(0, input.find("_")); // Separate data values from the base values "%d-%d_%d-%d" "data_max"
@@ -37,7 +37,7 @@ std::string PwrMonClient::UnpackData( std::string input, QBluetoothUuid uuid)
     else if (uuid == QBluetoothUuid(QString("137ae80c-8287-43b0-ac82-d2c7bc28b390")))
     { // For original Thermals Characteristic of the BLE server
         int systemp, upper, lower = 0;
-        const float ValueBase = 1023;
+        const float ValueBase = 4095;
 
         size_t range_start = input.find("_") + 1;
         systemp = static_cast<int>( atoi( input.substr(range_start-1).c_str() ));
