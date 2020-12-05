@@ -3,6 +3,7 @@
 #include <QBluetoothUuid>
 #include <QString>
 
+#include <cmath>
 #include <string>
 #include <sstream>
 
@@ -35,14 +36,17 @@ std::string PwrMonClient::UnpackData( std::string input, QBluetoothUuid uuid)
     }
 
     else if (uuid == QBluetoothUuid(QString("137ae80c-8287-43b0-ac82-d2c7bc28b390")))
-    { // For original Thermals Characteristic of the BLE server
-        int systemp, upper, lower = 0;
+    { // For original Thermals Characteristic of the BLE server, format "data_beta-upper-lower"
+        int systemp, beta, upper, lower = 0;
         const float ValueBase = 4095;
 
-        size_t range_start = input.find("_") + 1;
-        systemp = static_cast<int>( atoi( input.substr(range_start-1).c_str() ));
+        size_t meta_start = input.find("_") + 1;
+        systemp = static_cast<int>( atoi( input.substr(0, range_start-1).c_str() ));
 
-        std::string range_values = input.substr(range_start);
+        std::string meta = input.substr(meta_start);
+        beta = static_cast<int>( atoi( meta.substr(0, meta.find("-")).c_str() ));
+        
+        std::string range_values = meta.substr(meta.find("-") + 1);
         upper = static_cast<int>( atoi( range_values.substr( 0, range_values.find("-") ).c_str() ));
         lower = static_cast<int>( atoi( range_values.substr( range_values.find("-") + 1).c_str() ));
 
