@@ -23,8 +23,6 @@ For the client developer it abstracts away the connection process and Qt signal 
 BLE Descriptor is not implemented and probably never will. So does error logging and other important things
 
 ## Dependencies
-### Common
-- [Doxygen](https://www.doxygen.nl/index.html)
 ### Device firmware
 - [Arduino Core](https://github.com/arduino/Arduino)
 - Arduino Bluetooth (yet to be supported)
@@ -33,6 +31,8 @@ BLE Descriptor is not implemented and probably never will. So does error logging
 - [ESP32 BLE library](https://github.com/nkolban/ESP32_BLE_Arduino)[(Ardunino IDE)](https://www.arduino.cc/reference/en/libraries/esp32-ble-arduino)
 ### Client Controller(Library)
 - [Qt Bluetooth 5.15.2](https://doc.qt.io/qt-5/qtbluetooth-index.html)
+### Documentation
+- [Doxygen](https://www.doxygen.nl/index.html)
 
 ## Tools
 ### ESP32 Mainboard
