@@ -41,7 +41,7 @@ std::string PwrMonClient::UnpackData( std::string input, QBluetoothUuid uuid)
         const float ValueBase = 4095;
 
         size_t meta_start = input.find("_") + 1;
-        systemp = static_cast<int>( atoi( input.substr(0, range_start-1).c_str() ));
+        systemp = static_cast<int>( atoi( input.substr(0, meta_start-1).c_str() ));
 
         std::string meta = input.substr(meta_start);
         beta = static_cast<int>( atoi( meta.substr(0, meta.find("-")).c_str() ));
