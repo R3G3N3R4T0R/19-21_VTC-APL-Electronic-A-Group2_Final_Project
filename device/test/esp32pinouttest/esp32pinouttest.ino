@@ -21,7 +21,7 @@ void setup()
 
 void loop()
 {
-    for(pin = 16; pin <= 39; pin++)
+    for(int pin = 16; pin <= 39; pin++)
         if(digitalRead(pin) == HIGH)
             Serial.println(pin);
 }
